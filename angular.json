@@ -25,9 +25,17 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.css",
+              "src/style.css",
+              "src/style.ie7.css",
+              "src/style.responsive.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/jquery.js",
+              "src/script.js",
+              "src/script.responsive.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -72,6 +80,7 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "mokayada_front2:build"
+
           }
         },
         "test": {
@@ -87,6 +96,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -94,5 +104,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "ae9f75c6-a8c4-4fa0-b872-9db650fb6764"
   }
 }
