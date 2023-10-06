@@ -10,6 +10,11 @@
 
 
 
+  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>Item 1</button>
+    <button mat-menu-item>Item 2</button>
+  </mat-menu>
 
   <div class="art-textblock art-object227400126">
     <form class="art-search" name="Search" action="javascript:void(0)">
@@ -18,8 +23,9 @@
     </form>
   </div>
   <nav class="art-nav">
-    <ul class="art-hmenu"><li><a href="home.html" class="active">Login</a></li><li><a href="blog.html">Inscription</a></li></ul>
+    <ul class="art-hmenu" ><li (click)="goToLogin()">Login</li><li><a href="blog.html">Inscription</a></li></ul>
   </nav>
+
 
 
 </header>

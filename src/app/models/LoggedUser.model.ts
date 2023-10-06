@@ -1,8 +1,9 @@
 export class LoggedUser{
   constructor(public username:string,
-              public name:string,
+              public firstname:string,
+              public lastname:string,
               public state:string,
-              public roles:{authority:string}[],
+              public authorities:{authority:string}[],
               public expirationDate:Date,
               public jwt:string){}
 

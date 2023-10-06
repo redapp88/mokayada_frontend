@@ -14,7 +14,19 @@ import { MatProgressBarModule} from "@angular/material/progress-bar";
 import {HttpClientModule} from "@angular/common/http";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatInput, MatInputModule} from "@angular/material/input";
-import {MatFormField} from "@angular/material/form-field";
+import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
+import {MatOptionModule} from "@angular/material/core";
+import { MatSelectModule} from "@angular/material/select";
+import { OfferDetailsComponent } from './offers/offer-details/offer-details.component';
+import { LoginComponent } from './login/login.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import {MatIconModule} from "@angular/material/icon";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { UsersItemsManagementComponent } from './user/users-items-management/users-items-management.component';
+import { UsersOffersManagementComponent } from './user/users-offers-management/users-offers-management.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatMenuModule} from "@angular/material/menu";
 
 
 @NgModule({
@@ -22,7 +34,12 @@ import {MatFormField} from "@angular/material/form-field";
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    BodyComponent
+    BodyComponent,
+    OfferDetailsComponent,
+    LoginComponent,
+    ResetPasswordComponent,
+    UsersItemsManagementComponent,
+    UsersOffersManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -35,8 +52,18 @@ import {MatFormField} from "@angular/material/form-field";
     HttpClientModule,
     ReactiveFormsModule,
     MatInputModule,
-    
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatIconModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatMenuModule
+
   ],
+  exports: [ MatFormFieldModule, MatInputModule ],
   providers: [],
   bootstrap: [AppComponent]
 })

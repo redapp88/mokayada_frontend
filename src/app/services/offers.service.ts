@@ -26,8 +26,6 @@ export class OffersService {
       (`${environment.backEndUrl}/offers/byParams`,this.authService.httpOptions()).subscribe(
         (resData:any)=>{
           this.offers=resData;
-
-          console.log(this.offers+"////")
           this.emitOffers();
           observer.complete()
         },
@@ -35,6 +33,12 @@ export class OffersService {
       )
 
     })
+  }
+
+  public getOffer(offerId){
+    return  this.http.get
+    (`${environment.backEndUrl}/offers/getOne?offerId=${offerId}`,this.authService.httpOptions())
+
   }
 
 

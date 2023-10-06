@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col">
+    <h1>{{offer?.title}}</h1>
+    <p>o{{offer?.description}}</p>
+
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="demo-section">
+      <button mat-raised-button color="primary"
+              matBadge="8" matBadgePosition="before" matBadgeColor="accent">
+        {{offer?.city}}
+      </button>
+      <button mat-raised-button color="primary"
+              matBadge="8" matBadgePosition="before" matBadgeColor="accent">
+        {{offer?.categorie}}
+      </button>
+    </div>
+  </div>
+
+<div class="row">
+  <div class="col-3" *ngFor="let item of offer?.items let index = index">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>{{item.title}}</mat-card-title>
+          <mat-card-subtitle>{{item.creationDate}}</mat-card-subtitle>
+          <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content>
+        {{item.description}}
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>
+</div>

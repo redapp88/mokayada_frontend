@@ -6,6 +6,7 @@ import {Subscription} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {OffersPage} from "../models/OffersPage.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-body',
@@ -13,6 +14,11 @@ import {OffersPage} from "../models/OffersPage.model";
   styleUrls: ['./body.component.css']
 })
 export class BodyComponent implements OnInit {
+
+  toppings = new FormControl('');
+
+  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+
   loadOffersPage: OffersPage;
   isLoading: boolean = true;
   page: number = 0;
@@ -24,7 +30,7 @@ export class BodyComponent implements OnInit {
   form:FormGroup
   errorMessage: string = "";
 
-  constructor(private offerService: OffersService, private authSertvice: AuthService) {
+  constructor(private offerService: OffersService, private authSertvice: AuthService,private router:Router) {
 
   }
 
@@ -38,7 +44,7 @@ export class BodyComponent implements OnInit {
     )
     this.offerService.fetchOffers(this.keyword,this.city,this.categorie,this.page,this.size).subscribe(
       ()=>{},
-    (error)=>{this.errorMessage=error()}
+    (error)=>{this.errorMessage=error}
       )
 
 
@@ -48,15 +54,15 @@ export class BodyComponent implements OnInit {
       }),
       city: new FormControl(this.city, {
         updateOn: 'change',
-        validators: [Validators.required, Validators.minLength(3)]
       }),
 
       keyword: new FormControl(this.keyword, {
         updateOn: 'change',
 
       })
-
-
     })
+  }
+  goToDetails(offerId:number){
+    this.router.navigate(['/offers/details/'+offerId]);
   }
 }

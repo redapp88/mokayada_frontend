@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable, of, Subject} from "rxjs";
 import {environment} from "../../environement/environement";
 import {LoggedUser} from "../models/LoggedUser.model";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {JwtHelperService} from "@auth0/angular-jwt";
 
 
@@ -22,13 +22,16 @@ export class AuthService {
 
   login(username:string,password:string){
     return new Observable((observer)=>{
-      this.http.post(`${environment.backEndUrl}/login`,{username:username,password:password},{observe:"response"}).subscribe(
+      this.http.post(`${environment.backEndUrl}/authenticate`,{username:username,password:password},{observe:"response"}).subscribe(
         (resData)=>{
+
+
           let jwt=resData.headers.get("authorization");
           this.setUserData(jwt);
           observer.complete();
         },
-        (error)=>{
+        (error:HttpErrorResponse)=>{
+          console.log(error)
           observer.error(error)}
       )
 
@@ -39,15 +42,21 @@ export class AuthService {
   }
   private setUserData(jwt:string){
     let jwtHelper=new JwtHelperService();
+    console.log(jwt)
+    jwt=jwt.substring(7,)
+    console.log(jwt)
+
     if(jwt){
+      console.log(jwtHelper.decodeToken(jwt))
       let user:LoggedUser=
         new LoggedUser(jwtHelper.decodeToken(jwt).sub,
-          jwtHelper.decodeToken(jwt).name,
+          jwtHelper.decodeToken(jwt).firstname,
+          jwtHelper.decodeToken(jwt).lastname,
           jwtHelper.decodeToken(jwt).state,
-          jwtHelper.decodeToken(jwt).roles,
+          jwtHelper.decodeToken(jwt).authorities,
           new Date(new Date().getTime()+ +jwtHelper.decodeToken(jwt).experition),
           jwt)
-
+      console.log(user)
       this.storeData(user);
       this.autoLogout(user.tokenDuration);
       this.curentUser=user;
@@ -73,14 +82,15 @@ export class AuthService {
       else{
         let data=JSON.parse(authData) as
           { username:string,
-            name:string,
+            firstname:string,
+            lastname:string,
             state:string,
-            roles:{authority:string}[],
+            authorities:{authority:string}[],
             expirationDate:string,
             jwt:string};
 
         let user=
-          new LoggedUser(data.username,data.name,data.state,data.roles,new Date(data.expirationDate),data.jwt)
+          new LoggedUser(data.username,data.firstname,data.lastname,data.state,data.authorities,new Date(data.expirationDate),data.jwt)
 
         if(user.expirationDate<= new Date())
         {
@@ -136,16 +146,17 @@ export class AuthService {
   }
 
   isUser(){
+
     if(!this.curentUser)
       return false
-    return this.curentUser.roles.filter(r=>r.authority==="USER").length>0;
+    return this.curentUser.authorities.filter(r=>r.authority==="USER").length>0;
   }
 
   isManager(){
     if(!this.curentUser)
       return false
 
-    return this.curentUser.roles.filter(r=>r.authority==="MANAGER").length>0;
+    return this.curentUser.authorities.filter(r=>r.authority==="MANAGER").length>0;
   }
 
   isAuthentificated():Observable<boolean>{

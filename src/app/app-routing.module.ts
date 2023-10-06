@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import {HeaderComponent} from "./header/header.component";
 import {BodyComponent} from "./body/body.component";
 import {FooterComponent} from "./footer/footer.component";
+import {OfferDetailsComponent} from "./offers/offer-details/offer-details.component";
+import {LoginComponent} from "./login/login.component";
+import {UsersOffersManagementComponent} from "./user/users-offers-management/users-offers-management.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'public/home', pathMatch: 'full' },
@@ -11,6 +14,24 @@ const routes: Routes = [
     children: [
       {path: '', component: HeaderComponent, outlet: 'page_header'},
       {path: '', component: BodyComponent, outlet: 'page_body'},
+      {path: '', component: FooterComponent, outlet: 'page_footer'},
+    ]},
+  {path: 'offers/details/:offerId',
+    children: [
+      {path: '', component: HeaderComponent, outlet: 'page_header'},
+      {path: '', component: OfferDetailsComponent, outlet: 'page_body'},
+      {path: '', component: FooterComponent, outlet: 'page_footer'},
+    ]},
+  {path: 'login',
+    children: [
+      {path: '', component: HeaderComponent, outlet: 'page_header'},
+      {path: '', component: LoginComponent, outlet: 'page_body'},
+      {path: '', component: FooterComponent, outlet: 'page_footer'},
+    ]},
+  {path: 'user/offers-management',
+    children: [
+      {path: '', component: HeaderComponent, outlet: 'page_header'},
+      {path: '', component: UsersOffersManagementComponent, outlet: 'page_body'},
       {path: '', component: FooterComponent, outlet: 'page_footer'},
     ]},
   ]
