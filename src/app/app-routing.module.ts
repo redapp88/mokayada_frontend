@@ -6,6 +6,8 @@ import {FooterComponent} from "./footer/footer.component";
 import {OfferDetailsComponent} from "./offers/offer-details/offer-details.component";
 import {LoginComponent} from "./login/login.component";
 import {UsersOffersManagementComponent} from "./user/users-offers-management/users-offers-management.component";
+import {UserGuard} from "./guards/user.guard";
+import {UsersItemsManagementComponent} from "./user/users-items-management/users-items-management.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'public/home', pathMatch: 'full' },
@@ -28,10 +30,16 @@ const routes: Routes = [
       {path: '', component: LoginComponent, outlet: 'page_body'},
       {path: '', component: FooterComponent, outlet: 'page_footer'},
     ]},
-  {path: 'user/offers-management',
+  {path: 'user/offers-management',canActivate:[UserGuard],
     children: [
       {path: '', component: HeaderComponent, outlet: 'page_header'},
       {path: '', component: UsersOffersManagementComponent, outlet: 'page_body'},
+      {path: '', component: FooterComponent, outlet: 'page_footer'},
+    ]},
+  {path: 'user/items-management',canActivate:[UserGuard],
+    children: [
+      {path: '', component: HeaderComponent, outlet: 'page_header'},
+      {path: '', component: UsersItemsManagementComponent, outlet: 'page_body'},
       {path: '', component: FooterComponent, outlet: 'page_footer'},
     ]},
   ]

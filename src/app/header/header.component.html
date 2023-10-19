@@ -10,20 +10,36 @@
 
 
 
-  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item>Item 1</button>
-    <button mat-menu-item>Item 2</button>
-  </mat-menu>
+
 
   <div class="art-textblock art-object227400126">
     <form class="art-search" name="Search" action="javascript:void(0)">
-      <input type="text" value="">
-      <input type="submit" value="Search" name="search" class="art-search-button">
+<!--      <input type="text" value="">
+      <input type="submit" value="Search" name="search" class="art-search-button">-->
     </form>
   </div>
+
   <nav class="art-nav">
-    <ul class="art-hmenu" ><li (click)="goToLogin()">Login</li><li><a href="blog.html">Inscription</a></li></ul>
+
+    <ul class="art-hmenu" >
+      <li *ngIf="isAuthenticated">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           {{authenticatedUser.firstname}}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
+      </li>
+      <li *ngIf="!isAuthenticated" (click)="goToLogin()">Login</li>
+      <li *ngIf="!isAuthenticated"><a href="blog.html">Inscription</a></li>
+    </ul>
+    <button mat-mini-fab disabled aria-label="Example icon button with a home icon">
+      <mat-icon>home</mat-icon>
+    </button>
   </nav>
 
 

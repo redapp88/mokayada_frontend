@@ -20,6 +20,7 @@
       <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Mot de passe"
              formControlName="password"
              [ngClass]="{ 'is-invalid': (form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)) }">
+      <span class="floating-label">Your email address</span>
       <div class="invalid-feedback"
            *ngIf="form.controls.password.invalid && (form.controls.password.dirty || form.controls.password.touched)">
 

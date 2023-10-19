@@ -31,7 +31,7 @@ export class AuthService {
           observer.complete();
         },
         (error:HttpErrorResponse)=>{
-          console.log(error)
+         //console.log(error)
           observer.error(error)}
       )
 
@@ -42,12 +42,10 @@ export class AuthService {
   }
   private setUserData(jwt:string){
     let jwtHelper=new JwtHelperService();
-    console.log(jwt)
     jwt=jwt.substring(7,)
-    console.log(jwt)
 
     if(jwt){
-      console.log(jwtHelper.decodeToken(jwt))
+      jwtHelper.decodeToken(jwt);
       let user:LoggedUser=
         new LoggedUser(jwtHelper.decodeToken(jwt).sub,
           jwtHelper.decodeToken(jwt).firstname,
@@ -56,7 +54,6 @@ export class AuthService {
           jwtHelper.decodeToken(jwt).authorities,
           new Date(new Date().getTime()+ +jwtHelper.decodeToken(jwt).experition),
           jwt)
-      console.log(user)
       this.storeData(user);
       this.autoLogout(user.tokenDuration);
       this.curentUser=user;
@@ -67,12 +64,16 @@ export class AuthService {
   private storeData(user:LoggedUser){
     let currentUser=JSON.stringify(user);
     localStorage.setItem('authData',currentUser);
+
+
+
   }
 
 
   autoLogin(){
     return new Observable<boolean>(observer=>{
       let authData =localStorage.getItem('authData')
+     // console.log("////////////////"+authData)
       if(!authData){
         this.curentUser=null;
         this.emitUser();
@@ -123,6 +124,7 @@ export class AuthService {
   }
 
   autoLogout(duration:number){
+
     if(this.activeLogoutTimer) {
       clearTimeout(this.activeLogoutTimer)
     }

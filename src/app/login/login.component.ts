@@ -42,9 +42,13 @@ export class LoginComponent {
 
 
     })
-    if (this.authService.curentUser)
+    if (this.authService.curentUser){
+
       this.roleRedirecte();
+    }
+
     else {
+
       this.authService.autoLogin().subscribe(
         (resData) => {
           if (resData) {
@@ -97,7 +101,7 @@ export class LoginComponent {
 
   private roleRedirecte() {
     if (this.authService.isUser())
-      this.router.navigate(['user/offers-management']);
+      this.router.navigate(['user/items-management']);
     else if (this.authService.isManager())
       this.router.navigate(['adminArea']);
   }

@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class UsersOffersManagementComponent {
 
+
+  ngOnInit() {
+    localStorage.setItem("test","testItemValue");
+    console.log("storaaaaage"+localStorage.getItem('authData'))
+  }
+
+
 }

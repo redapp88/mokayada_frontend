@@ -38,12 +38,12 @@ export class BodyComponent implements OnInit {
     this.offersSubscription = this.offerService.offersSubject.subscribe(
       (resultData: OffersPage) => {
         this.loadOffersPage = resultData;
-        this.isLoading = false;
+
       }
 
     )
     this.offerService.fetchOffers(this.keyword,this.city,this.categorie,this.page,this.size).subscribe(
-      ()=>{},
+      ()=>{   this.isLoading = false;},
     (error)=>{this.errorMessage=error}
       )
 
