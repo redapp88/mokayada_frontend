@@ -22,7 +22,7 @@ export class AuthService {
 
   login(username:string,password:string){
     return new Observable((observer)=>{
-      this.http.post(`${environment.backEndUrl}/authenticate`,{username:username,password:password},{observe:"response"}).subscribe(
+      this.http.post(`${environment.backEndUrl}/auth/authenticate`,{username:username,password:password},{observe:"response"}).subscribe(
         (resData)=>{
 
 
@@ -42,17 +42,17 @@ export class AuthService {
   }
   private setUserData(jwt:string){
     let jwtHelper=new JwtHelperService();
-    jwt=jwt.substring(7,)
+    let jwt_no_prefix=jwt.substring(7,)
 
     if(jwt){
-      jwtHelper.decodeToken(jwt);
+
       let user:LoggedUser=
-        new LoggedUser(jwtHelper.decodeToken(jwt).sub,
-          jwtHelper.decodeToken(jwt).firstname,
-          jwtHelper.decodeToken(jwt).lastname,
-          jwtHelper.decodeToken(jwt).state,
-          jwtHelper.decodeToken(jwt).authorities,
-          new Date(new Date().getTime()+ +jwtHelper.decodeToken(jwt).experition),
+        new LoggedUser(jwtHelper.decodeToken(jwt_no_prefix).sub,
+          jwtHelper.decodeToken(jwt_no_prefix).firstname,
+          jwtHelper.decodeToken(jwt_no_prefix).lastname,
+          jwtHelper.decodeToken(jwt_no_prefix).state,
+          jwtHelper.decodeToken(jwt_no_prefix).authorities,
+          new Date(new Date().getTime()+ +jwtHelper.decodeToken(jwt_no_prefix).experition),
           jwt)
       this.storeData(user);
       this.autoLogout(user.tokenDuration);
