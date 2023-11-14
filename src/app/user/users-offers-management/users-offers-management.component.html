@@ -1,1 +1,55 @@
-<p>users-offers-management works!</p>
+<form [formGroup]="form">
+<div class="row">
+  <div class="col-4">
+    <h2>Mes Offres</h2>
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Description</mat-label>
+      <input (change)="fetchOffers()" type="text" matInput placeholder="" formControlName="keyword"/>
+      <mat-error>
+      </mat-error>
+    </mat-form-field>
+    <mat-selection-list #offers [multiple]="false">
+      <mat-list-option *ngFor="let offer of loadedOffers" [value]="offer">
+        {{offer.title}}
+      </mat-list-option>
+    </mat-selection-list>
+
+    <p>
+      Option selected: {{offers.selectedOptions.selected[0]?.value}}
+    </p>
+  </div>
+  <div class="col-8"></div>
+</div>
+
+
+  <div cdkDropListGroup>
+    <div class="example-container">
+      <h2>To do</h2>
+
+      <div
+        cdkDropList
+        [cdkDropListData]="todo"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)">
+        @for (item of loadedItemsPage.content; track item) {
+        <div class="example-box" cdkDrag>{{item}}</div>
+        }
+      </div>
+    </div>
+
+    <div class="example-container">
+      <h2>Done</h2>
+
+      <div
+        cdkDropList
+        [cdkDropListData]="done"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)">
+        @for (item of offerItems; track item) {
+        <div class="example-box" cdkDrag>{{item}}</div>
+        }
+      </div>
+    </div>
+  </div>
+
+</form>

@@ -35,7 +35,6 @@ export class UsersItemsManagementComponent {
     this.itemsService.itemsSubject.subscribe(
       (res => {
         this.loadedItemsPage = res
-        console.log(this.loadedItemsPage)
       })
     )
 
