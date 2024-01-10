@@ -7,6 +7,10 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {OffersPage} from "../models/OffersPage.model";
 import {Router} from "@angular/router";
+import {UsersAddProposalComponent} from "./users-add-proposal/users-add-proposal.component";
+import {MatDialog} from "@angular/material/dialog";
+import {SharedService} from "../services/shared.service";
+import {UsersUpdateProposalComponent} from "./users-update-proposal/users-update-proposal.component";
 
 @Component({
   selector: 'app-body',
@@ -15,37 +19,35 @@ import {Router} from "@angular/router";
 })
 export class BodyComponent implements OnInit {
 
-  toppings = new FormControl('');
 
-  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  cities: String[] = ["Toutes", "Rabat", "Casablanca", "Fes", "Agadir"];
+  categories: String[] = ["Toutes", "Maison", "Auto-Moto", "Enfants", "Voyages"];
 
   loadOffersPage: OffersPage;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
   page: number = 0;
-  size: number = 10;
+  size: number = 5;
   keyword: string = ""
   city: string = "";
-  categorie:string = "";
-  offersSubscription:Subscription;
-  form:FormGroup
+  categorie: string = "";
+  offersSubscription: Subscription;
+  form: FormGroup
   errorMessage: string = "";
 
-  constructor(private offerService: OffersService, private authSertvice: AuthService,private router:Router) {
+  constructor(private offerService: OffersService, private sharedService: SharedService, public authSertvice: AuthService, private router: Router, private dialog: MatDialog) {
 
   }
+
+  popUpWith: string = "80%";
 
   ngOnInit(): void {
     this.offersSubscription = this.offerService.offersSubject.subscribe(
       (resultData: OffersPage) => {
         this.loadOffersPage = resultData;
+        console.log(this.loadOffersPage)
 
       }
-
     )
-    this.offerService.fetchOffers(this.keyword,this.city,this.categorie,this.page,this.size).subscribe(
-      ()=>{   this.isLoading = false;},
-    (error)=>{this.errorMessage=error}
-      )
 
 
     this.form = new FormGroup({
@@ -62,7 +64,69 @@ export class BodyComponent implements OnInit {
       })
     })
   }
-  goToDetails(offerId:number){
-    this.router.navigate(['/offers/details/'+offerId]);
+
+  goToDetails(offerId: number) {
+    this.router.navigate(['/offers/details/' + offerId]);
+  }
+
+  onLoadOffers() {
+    this.authSertvice.curentUser
+    this.isLoading = true;
+    this.offerService.fetchOffers(this.keyword, this.city, this.categorie, this.page, this.size).subscribe(
+      () => {
+        this.isLoading = false;
+      },
+      (error) => {
+        this.errorMessage = error;
+        this.isLoading = false;
+      },
+      () => {
+        this.isLoading = false;
+      }
+    )
+  }
+
+  onPaginatorChange($event: any) {
+    this.page = $event.pageIndex;
+    this.size = $event.pageSize;
+    this.onLoadOffers()
+
+
+  }
+
+  onAddProposal(offer) {
+    const dialogRef = this.dialog.open(UsersAddProposalComponent, {
+      data: {offer},
+      width: this.popUpWith,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == "success") {
+        this.sharedService.openSnackBar("Proposition Ajouté", "")
+        this.onLoadOffers();
+      }
+    });
+  }
+
+  onUpdateProposal(offer){
+    const dialogRef = this.dialog.open(UsersUpdateProposalComponent, {
+      data: {offer},
+      width: this.popUpWith,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == "success") {
+        this.sharedService.openSnackBar("Modification effectuée", "")
+        this.onLoadOffers();
+      }
+    });
+  }
+
+  isAlreadyMadeProposale(offer: Offer) {
+    let alreadyProposal: boolean = false;
+    offer?.propositions.forEach(o => {
+      if (o.owner?.username == this.authSertvice.curentUser.username) {
+        alreadyProposal = true;
+      }
+    })
+    return alreadyProposal;
   }
 }

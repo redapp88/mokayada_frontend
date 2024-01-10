@@ -25,11 +25,10 @@
               "src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css",
-              "src/style.css",
-              "src/style.ie7.css",
-              "src/style.responsive.css"
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/assets/css/style.css",
+              "src/assets/css/style.ie7.css",
+              "src/assets/css/style.responsive.css"
             ],
             "scripts": [
               "src/jquery.js",
@@ -42,13 +41,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "4mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "4mb"
                 }
               ],
               "outputHashing": "all"
@@ -96,10 +95,16 @@
               "src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/assets/css/style.css",
+              "src/assets/css/style.ie7.css",
+              "src/assets/css/style.responsive.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/jquery.js",
+              "src/script.js",
+              "src/script.responsive.js"
+            ]
           }
         }
       }

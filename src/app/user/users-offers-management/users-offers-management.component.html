@@ -1,6 +1,11 @@
 <form [formGroup]="form">
 <div class="row">
   <div class="col-4">
+    <div class="example-button-container">
+      <button mat-fab color="primary" aria-label="Example icon button with a delete icon" (click)="onAddOffer()">
+        <mat-icon>plus_one</mat-icon>
+      </button>
+    </div>
     <h2>Mes Offres</h2>
     <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>Description</mat-label>
@@ -8,48 +13,59 @@
       <mat-error>
       </mat-error>
     </mat-form-field>
-    <mat-selection-list #offers [multiple]="false">
-      <mat-list-option *ngFor="let offer of loadedOffers" [value]="offer">
+    <mat-selection-list #offers [multiple]="false" (selectionChange)="onChangeSelectedOffer(offers.selectedOptions.selected[0]?.value)">
+      <mat-list-option  *ngFor="let offer of loadedOffers" [value]="offer">
         {{offer.title}}
       </mat-list-option>
     </mat-selection-list>
 
-    <p>
-      Option selected: {{offers.selectedOptions.selected[0]?.value}}
-    </p>
+
   </div>
-  <div class="col-8"></div>
+  <div class="col-4">
+    <div class="example-container">
+      <h2>Items disponibles</h2>
+
+      <div
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="loadedItems"
+        [cdkDropListConnectedTo]="[doneList]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)">
+
+        <div class="example-box" *ngFor="let item of loadedItems" cdkDrag>{{item.title}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-4">
+    <div class="example-button-row">
+      <button mat-button>Basic</button>
+      <button mat-button color="primary" (click)="onSaveItemsAffectation()">Enregistrer</button>
+    </div>
+    <div class="example-container">
+      <h2>Items de l'offre</h2>
+
+      <div
+        cdkDropList
+        #doneList="cdkDropList"
+        [cdkDropListData]="loadedOfferItems"
+        [cdkDropListConnectedTo]="[todoList]"
+        class="example-list"
+        (cdkDropListDropped)="drop($event)">
+
+        <div class="example-box" *ngFor="let item of loadedOfferItems" cdkDrag>{{item.title}}</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
-  <div cdkDropListGroup>
-    <div class="example-container">
-      <h2>To do</h2>
 
-      <div
-        cdkDropList
-        [cdkDropListData]="todo"
-        class="example-list"
-        (cdkDropListDropped)="drop($event)">
-        @for (item of loadedItemsPage.content; track item) {
-        <div class="example-box" cdkDrag>{{item}}</div>
-        }
-      </div>
-    </div>
+<div class="row">
 
-    <div class="example-container">
-      <h2>Done</h2>
 
-      <div
-        cdkDropList
-        [cdkDropListData]="done"
-        class="example-list"
-        (cdkDropListDropped)="drop($event)">
-        @for (item of offerItems; track item) {
-        <div class="example-box" cdkDrag>{{item}}</div>
-        }
-      </div>
-    </div>
-  </div>
+</div>
+
+
 
 </form>

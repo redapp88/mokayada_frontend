@@ -2,31 +2,31 @@
   <div class="art-content-layout">
     <div class="art-content-layout-row">-->
 
-<h2 class="art-postheader">Derniers offres</h2>
+<h2 class="art-postheader">Dernieres offres</h2>
 
 <form class="example-form" [formGroup]="form">
   <div class="row">
-    <div class="col-4">
+    <div class="col-3">
       <mat-form-field>
         <mat-label>Ville</mat-label>
         <mat-select formControlName="city" multiple>
-          <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+          <mat-option *ngFor="let city of cities" [value]="city">{{city}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
 
-    <div class="col-4">
+    <div class="col-3">
       <mat-form-field>
         <mat-label>Categories</mat-label>
         <mat-select formControlName="categorie" multiple>
-          <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+          <mat-option *ngFor="let categorie of categories" [value]="categorie">{{categorie}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
 
-    <div class="col-4">
+    <div class="col-3">
       <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Keyword</mat-label>
         <input matInput formControlName="keyword"/>
@@ -36,18 +36,22 @@
       </mat-form-field>
     </div>
 
+    <div class="col-3">
+      <button mat-button color="warn" (click)="onLoadOffers()">Chercher</button>
+    </div>
+
   </div>
 </form>
 
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 <div class="row" *ngIf="!isLoading">
-  <div class="col-4" *ngFor="let offer of loadOffersPage.content; let index = index">
-    <mat-card class="example-card" (click)="goToDetails(offer.id)" >
+  <div class="col-3" *ngFor="let offer of loadOffersPage?.content; let index = index">
+    <mat-card class="example-card" >
       <mat-card-header>
         <mat-card-title-group>
           <mat-card-title>{{offer?.title}}</mat-card-title>
           <mat-card-subtitle>{{offer?.id}}</mat-card-subtitle>
-          <img mat-card-md-image [src]="offer?.items[0]?.photos[0]?.url"  [alt]="offer?.items[0]?.photos[0]?.url">
+         <!-- <img mat-card-md-image [src]="offer?.items[0]?.photos[0]?.url"  [alt]="offer?.title">-->
         </mat-card-title-group>
       </mat-card-header>
       <mat-card-content>
@@ -58,7 +62,8 @@
       </mat-card-content>
       <mat-card-actions>
         <button mat-button (click)="goToDetails(offer.id)" >Details</button>
-
+        <button *ngIf="authSertvice.curentUser && isAlreadyMadeProposale(offer)" mat-button  class="btn-warning" (click)="onUpdateProposal(offer)" >Changer ma proposition</button>
+        <button *ngIf="authSertvice.curentUser && !isAlreadyMadeProposale(offer)" mat-button  class="btn-warning" (click)="onAddProposal(offer)" >Proposer une offre</button>
       </mat-card-actions>
       <mat-card-footer>
 
@@ -67,7 +72,14 @@
   </div>
 
 </div>
-
+<mat-paginator [length]="loadOffersPage?.numberOfElements"
+               [pageSize]="size"
+               [pageIndex]="page"
+               [pageSizeOptions]="[5, 10, 25, 100]"
+               (page)="onPaginatorChange($event)"
+               aria-label="Select page"
+               showFirstLastButtons>
+</mat-paginator>
 
 <!--    </div>
   </div>

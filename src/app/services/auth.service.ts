@@ -35,8 +35,6 @@ export class AuthService {
           observer.error(error)}
       )
 
-
-
     })
 
   }

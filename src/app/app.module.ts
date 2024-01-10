@@ -28,10 +28,18 @@ import {UsersOffersManagementComponent} from './user/users-offers-management/use
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatMenuModule} from "@angular/material/menu";
 import {UsersAddItemComponent} from './user/users-items-management/users-add-item/users-add-item.component';
-import { ImageMaximizeComponent } from './shared/image-maximize/image-maximize.component';
+import {ImageMaximizeComponent} from './shared/image-maximize/image-maximize.component';
 import {MatPaginatorModule} from "@angular/material/paginator";
-import { UsersDeleteItemComponent } from './user/users-items-management/users-delete-item/users-delete-item.component';
-import { UsersDetailsItemComponent } from './user/users-items-management/users-details-item/users-details-item.component';
+import {UsersDeleteItemComponent} from './user/users-items-management/users-delete-item/users-delete-item.component';
+import {UsersDetailsItemComponent} from './user/users-items-management/users-details-item/users-details-item.component';
+import {MatListModule} from "@angular/material/list";
+import {DragDropModule} from "@angular/cdk/drag-drop";
+import { UsersAddOfferComponent } from './user/users-offers-management/users-add-offer/users-add-offer.component';
+import {MatButtonModule} from "@angular/material/button";
+import { UsersAddProposalComponent } from './body/users-add-proposal/users-add-proposal.component';
+import { UsersUpdateProposalComponent } from './body/users-update-proposal/users-update-proposal.component';
+import { UsersProposalManagementComponent } from './user/users-proposal-management/users-proposal-management.component';
+import { UsersDeleteProposalComponent } from './body/users-delete-proposal/users-delete-proposal.component';
 
 
 @NgModule({
@@ -48,7 +56,13 @@ import { UsersDetailsItemComponent } from './user/users-items-management/users-d
     UsersAddItemComponent,
     ImageMaximizeComponent,
     UsersDeleteItemComponent,
-    UsersDetailsItemComponent
+    UsersDetailsItemComponent,
+    UsersAddOfferComponent,
+    UsersAddProposalComponent,
+    UsersUpdateProposalComponent,
+    UsersProposalManagementComponent,
+    UsersDeleteProposalComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -71,7 +85,10 @@ import { UsersDetailsItemComponent } from './user/users-items-management/users-d
     MatSnackBarModule,
     MatMenuModule,
     MatDialogModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatListModule,
+    DragDropModule,
+    MatButtonModule
 
   ],
   exports: [MatFormFieldModule, MatInputModule],

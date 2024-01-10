@@ -7,7 +7,9 @@ import {AuthService} from "../../services/auth.service";
 import {MatDialog} from "@angular/material/dialog";
 import {OffersService} from "../../services/offers.service";
 import {Item} from "../../models/Item.model";
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {UsersAddItemComponent} from "../users-items-management/users-add-item/users-add-item.component";
+import {UsersAddOfferComponent} from "./users-add-offer/users-add-offer.component";
 
 @Component({
   selector: 'app-users-offers-management',
@@ -16,18 +18,22 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag
 })
 export class UsersOffersManagementComponent {
 
-  constructor(private offersService: OffersService,private itemsService:ItemsService, private sharedService: SharedService, private authService: AuthService, private dialog: MatDialog) {
+  constructor(private offersService: OffersService, private itemsService: ItemsService, private sharedService: SharedService, private authService: AuthService, private dialog: MatDialog) {
   }
 
   loadedOffers: Offer[] = [];
-  offerItems:Item[]=[];
-  loadedItemsPage;
+  loadedOfferItems: Item[] = [];
+  loadedItems: Item[] = [];
   errorMessage: string = "";
   isLoadingOffers: boolean = false;
-  isLoadingItems:boolean = true;
-  page:number = 0;
-  size:number = 5;
+  isLoadingItems: boolean = false;
+  isLoadingOfferItems: boolean = false;
+  isSavingItems: boolean = false;
+  page: number = 0;
+  size: number = 5;
   form: FormGroup;
+  popUpWith: string = "60%";
+  selectedOffer: Offer = null;
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -37,49 +43,52 @@ export class UsersOffersManagementComponent {
       })
     })
     this.offersService.offersSubject.subscribe(
-      (res)=>{
+      (res) => {
         this.loadedOffers = res;
+        if(this.loadedOffers.length>0){
+
+        }
       }
     )
 
     this.itemsService.itemsSubject.subscribe(
-      (res)=>{
-        this.loadedItemsPage = res
+      (res) => {
+        this.loadedItems = res
+      }
+    )
+    this.itemsService.offersItemsSubject.subscribe(
+      (res) => {
+        this.loadedOfferItems = res
       }
     )
 
     this.fetchOffers()
-    this.fetchItems();
-  }
-
-  onPaginatorChange($event: any) {
-    this.page = $event.pageIndex;
-    this.size = $event.pageSize;
-    this.fetchItems();
-
 
   }
+
+
 
   public fetchOffers() {
-    this.isLoadingOffers=true;
+    this.isLoadingOffers = true;
 
 
     this.offersService.fetchOffersByUser(this.authService.curentUser.username, this.form.value["keyword"]).subscribe(
       () => {
       },
       (error) => {
-        this.isLoadingOffers=false
+        this.isLoadingOffers = false
         this.errorMessage = error
       },
-      ()=>{
-        this.isLoadingOffers=false;
+      () => {
+        this.isLoadingOffers = false;
       }
     )
   }
 
-  fetchItems(){
-    this.isLoadingItems=true
-    this.itemsService.fetchitems(this.authService.curentUser.username, this.page, this.size).subscribe(
+
+  fetchOfferItems(offerId: number) {
+    this.isLoadingOfferItems = true
+    this.itemsService.fetchOfferItems(this.authService.curentUser.username,offerId).subscribe(
       () => {
       },
       error => {
@@ -93,7 +102,7 @@ export class UsersOffersManagementComponent {
   }
 
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<Item[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -104,6 +113,37 @@ export class UsersOffersManagementComponent {
         event.currentIndex,
       );
     }
+  }
+
+  onAddOffer() {
+    const dialogRef = this.dialog.open(UsersAddOfferComponent, {
+      data: {},
+      width: this.popUpWith,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == "success") {
+        this.sharedService.openSnackBar("Offer added successfuly", "")
+        this.fetchOffers();
+      }
+    });
+  }
+
+  onChangeSelectedOffer(offer) {
+    this.selectedOffer = offer;
+    this.fetchOfferItems(offer.id);
+  }
+
+  onSaveItemsAffectation() {
+    this.isSavingItems = true;
+    this.itemsService.saveItemAffectation(this.selectedOffer, this.loadedOfferItems).subscribe(
+      ()=>{
+        this.isSavingItems=false;
+      },
+    (error)=>{
+        this.errorMessage=error;
+      this.isSavingItems=false;
+    }
+    )
   }
 
 }
