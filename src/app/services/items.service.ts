@@ -7,6 +7,7 @@ import {Item} from "../models/Item.model";
 import {ItemRequest} from "../requests/Item.request";
 import {Injectable} from "@angular/core";
 import {Offer} from "../models/Offer.model";
+import {OfferWithItemsRequest} from "../requests/OfferWithItems.request";
 
 @Injectable({
   providedIn: 'root'
@@ -124,9 +125,9 @@ export class ItemsService {
     })
   }
 
-  saveItemAffectation(selectedOffer: Offer, loadedOfferItems: Item[]) {
+  saveItemAffectation(selectedOffer: Offer, offerWithItemsRequest:OfferWithItemsRequest) {
 
-    return this.http.post(`${environment.backEndUrl}/items/saveToOffer?offerId=${selectedOffer.id}`,loadedOfferItems, this.authService.httpOptions())
+    return this.http.post(`${environment.backEndUrl}/items/saveToOffer?offerId=${selectedOffer.id}`,offerWithItemsRequest, this.authService.httpOptions())
 
   }
 

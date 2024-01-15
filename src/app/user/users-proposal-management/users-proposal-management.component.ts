@@ -29,9 +29,11 @@ export class UsersProposalManagementComponent implements OnInit{
     this.offersService.offersSubject.subscribe(
       (res)=>{
         this.loadedProposales = res;
+        console.log( this.loadedProposales)
 
       }
     )
+
     this. loadProposales();
   }
 
@@ -59,15 +61,16 @@ export class UsersProposalManagementComponent implements OnInit{
       dialogRef.afterClosed().subscribe(result => {
         if (result == "success") {
           this.sharedService.openSnackBar("Modification effectuée", "")
-          this.loadedProposales
+          this.loadProposales();
         }
       });
 
   }
 
   onDelete(proposal:Offer){
+    let mode = "withoutDeleteOption";
     const dialogRef = this.dialog.open(UsersDeleteProposalComponent, {
-      data: {proposal},
+      data: {proposal,mode},
       width: this.popUpWith,
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -77,4 +80,6 @@ export class UsersProposalManagementComponent implements OnInit{
       }
     });
   }
+
+
 }

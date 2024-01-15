@@ -12,6 +12,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {UsersAddItemComponent} from "../../user/users-items-management/users-add-item/users-add-item.component";
 import {SharedService} from "../../services/shared.service";
 import {Offer} from "../../models/Offer.model";
+import {UsersDeleteProposalComponent} from "../users-delete-proposal/users-delete-proposal.component";
 
 @Component({
   selector: 'app-users-update-proposal',
@@ -28,7 +29,7 @@ export class UsersUpdateProposalComponent {
   categories: String[] = ["Maison", "Auto-Moto", "Enfants", "Voyages"];
 
   loadedOffer: Offer;
-  loadedProposal:Offer;
+  loadedProposal: Offer;
   allUsersItems: Item[] = [];
   proposedItems: Item[] = [];
   isLoadingAllUsersItems: boolean = false;
@@ -41,15 +42,18 @@ export class UsersUpdateProposalComponent {
   popUpWith: string = "60%";
   selectedOffer: Offer = null;
   loadedOfferItems: any;
+  mode:string = "withoutDeleteOption";
 
   constructor(private offersService: OffersService, private itemsService: ItemsService, private authService: AuthService, private sharedService: SharedService,
               public dialogRef: MatDialogRef<UsersAddItemComponent>,
               private photoService: PhotosService, private dialog: MatDialog,
-              @Inject(MAT_DIALOG_DATA) private data: { offer: Offer }) {
+              @Inject(MAT_DIALOG_DATA) private data: { offer: Offer,mode:string }) {
   }
 
 
   ngOnInit(): void {
+    this.mode=this.data.mode;
+
     this.isSavingOffer = false;
     this.errorMessage = "";
     this.loadedOffer = this.data.offer;
@@ -93,18 +97,13 @@ export class UsersUpdateProposalComponent {
       (res) => {
         this.allUsersItems = res;
 
-        let temporalArrayItems:Item[]=[];
-        this.allUsersItems.forEach(i=>{
-          if(!this.proposedItems.some(e => e.id === i.id)){
+        let temporalArrayItems: Item[] = [];
+        this.allUsersItems.forEach(i => {
+          if (!this.proposedItems.some(e => e.id === i.id)) {
             temporalArrayItems.push(i);
           }
         })
         this.allUsersItems = temporalArrayItems;
-
-
-
-
-
 
 
       }
@@ -201,7 +200,24 @@ export class UsersUpdateProposalComponent {
     )
   }
 
-  annuler(){
+  annuler() {
     this.dialogRef.close('dismiss');
   }
+
+  onDeleteProposal(){
+    let proposal = this.loadedProposal
+
+    const dialogRef = this.dialog.open(UsersDeleteProposalComponent, {
+      data: {proposal},
+      width: this.popUpWith,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == "success") {
+        this.sharedService.openSnackBar("Suppression effectuée", "")
+        this.dialogRef.close('success');
+      }
+    });
+  }
 }
+
+

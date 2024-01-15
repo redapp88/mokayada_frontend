@@ -14,7 +14,7 @@
       </mat-error>
     </mat-form-field>
     <mat-selection-list #offers [multiple]="false" (selectionChange)="onChangeSelectedOffer(offers.selectedOptions.selected[0]?.value)">
-      <mat-list-option  *ngFor="let offer of loadedOffers" [value]="offer">
+      <mat-list-option [selected]="isTheSelectedOne(i,offer)"  *ngFor="let offer of loadedOffers ; index as i" [value]="offer">
         {{offer.title}}
       </mat-list-option>
     </mat-selection-list>
@@ -27,33 +27,35 @@
 
       <div
         cdkDropList
+
         #todoList="cdkDropList"
         [cdkDropListData]="loadedItems"
         [cdkDropListConnectedTo]="[doneList]"
         class="example-list"
         (cdkDropListDropped)="drop($event)">
 
-        <div class="example-box" *ngFor="let item of loadedItems" cdkDrag>{{item.title}}</div>
+        <div [cdkDragDisabled]="this.selectedOffer?.status!=='FREE'" class="example-box" *ngFor="let item of loadedItems" cdkDrag>{{item.title}}</div>
       </div>
     </div>
   </div>
   <div class="col-4">
     <div class="example-button-row">
-      <button mat-button>Basic</button>
-      <button mat-button color="primary" (click)="onSaveItemsAffectation()">Enregistrer</button>
+      <button mat-button>Supprimer</button>
+      <button mat-button color="primary" (click)="onSaveItemsAffectation()" [disabled]="this.selectedOffer?.status!=='FREE'">Enregistrer</button>
     </div>
     <div class="example-container">
       <h2>Items de l'offre</h2>
 
       <div
         cdkDropList
+
         #doneList="cdkDropList"
         [cdkDropListData]="loadedOfferItems"
         [cdkDropListConnectedTo]="[todoList]"
         class="example-list"
         (cdkDropListDropped)="drop($event)">
 
-        <div class="example-box" *ngFor="let item of loadedOfferItems" cdkDrag>{{item.title}}</div>
+        <div [cdkDragDisabled]="this.selectedOffer?.status!=='FREE'"  class="example-box" *ngFor="let item of loadedOfferItems" cdkDrag>{{item.title}}</div>
       </div>
     </div>
   </div>
@@ -61,10 +63,76 @@
 
 
 
-<div class="row">
+  <form class="example-form" [formGroup]="offerform">
+    <mat-dialog-content class="mat-typography">
+      <div class="row">
+        <div class="col-md-6 offset-sm-3">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Titre</mat-label>
+            <input matInput formControlName="title">
+            <mat-error>
+
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-6 offset-sm-3">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="" formControlName="description"></textarea>
+            <mat-error>
+
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 offset-sm-3">
+          <mat-form-field appearance="fill">
+            <mat-label></mat-label>
+            <mat-select matNativeControl formControlName="categorie">
+              <mat-option *ngFor="let categorie of categories"
+                          [value]=categorie>{{categorie}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 offset-sm-3">
+          <mat-form-field appearance="fill">
+            <mat-label></mat-label>
+            <mat-select matNativeControl formControlName="city">
+              <mat-option *ngFor="let city of cities"
+                          [value]=city>{{city}}
+              </mat-option>
+            </mat-select>
+            <mat-error>
+
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div *ngIf="false">
+          <h4> Enregistrement de l'offre en cours</h4>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
 
 
-</div>
+        <mat-error *ngIf=errorMessage>
+          <div [innerHTML]="errorMessage"></div>
+        </mat-error>
+
+      </div>
+
+    </mat-dialog-content>
+  </form>
 
 
 

@@ -29,7 +29,7 @@ export class UsersDeleteProposalComponent implements OnInit{
 
   onDeleteProposal() {
     this.isLoading=true;
-    this.offerService.deleteOffer(this.loadedProposal.id).subscribe(
+    this.offerService.deleteProposal(this.loadedProposal.id).subscribe(
       ()=>{
         this.isLoading=false;
         this.dialogRef.close('success');},

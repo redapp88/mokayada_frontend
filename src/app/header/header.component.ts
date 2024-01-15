@@ -43,4 +43,9 @@ this.authService.userSubject.subscribe(
     this.router.navigate(["/login"])
   }
 
+  onLogout(){
+    this.authService.logout();
+    this.router.navigate(["/login"])
+  }
+
 }

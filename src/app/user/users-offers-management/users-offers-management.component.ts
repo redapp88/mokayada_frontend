@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Offer} from "../../models/Offer.model";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ItemsService} from "../../services/items.service";
 import {SharedService} from "../../services/shared.service";
 import {AuthService} from "../../services/auth.service";
@@ -10,6 +10,8 @@ import {Item} from "../../models/Item.model";
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {UsersAddItemComponent} from "../users-items-management/users-add-item/users-add-item.component";
 import {UsersAddOfferComponent} from "./users-add-offer/users-add-offer.component";
+import {OfferRequest} from "../../requests/Offer.request";
+import {OfferWithItemsRequest} from "../../requests/OfferWithItems.request";
 
 @Component({
   selector: 'app-users-offers-management',
@@ -32,8 +34,11 @@ export class UsersOffersManagementComponent {
   page: number = 0;
   size: number = 5;
   form: FormGroup;
+  offerform: FormGroup;
   popUpWith: string = "60%";
   selectedOffer: Offer = null;
+  cities: String[] = ["Rabat", "Casablanca", "Fes", "Agadir"];
+  categories: String[] = ["Maison", "Auto-Moto", "Enfants", "Voyages"];
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -42,10 +47,37 @@ export class UsersOffersManagementComponent {
         validators: []
       })
     })
+
+    this.offerform = new FormGroup({
+
+      title: new FormControl({value: '', disabled: this.selectedOffer?.status!=='FREE'}, {
+        updateOn: 'change',
+        validators: [Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(50)]
+
+      }),
+      description: new FormControl({value: '', disabled: this.selectedOffer?.status!=='FREE'}, {
+        updateOn: 'change',
+        validators: []
+      }),
+      categorie: new FormControl({value: '', disabled: this.selectedOffer?.status!=='FREE'}, {
+        updateOn: 'change',
+        validators: []
+      }),
+      city: new FormControl({value: '', disabled: this.selectedOffer?.status!=='FREE'}, {
+          updateOn: 'change',
+          validators: [Validators.required]
+        }
+      ),
+
+
+    })
+
     this.offersService.offersSubject.subscribe(
       (res) => {
         this.loadedOffers = res;
-        if(this.loadedOffers.length>0){
+        if (this.loadedOffers.length > 0) {
 
         }
       }
@@ -65,7 +97,6 @@ export class UsersOffersManagementComponent {
     this.fetchOffers()
 
   }
-
 
 
   public fetchOffers() {
@@ -88,7 +119,7 @@ export class UsersOffersManagementComponent {
 
   fetchOfferItems(offerId: number) {
     this.isLoadingOfferItems = true
-    this.itemsService.fetchOfferItems(this.authService.curentUser.username,offerId).subscribe(
+    this.itemsService.fetchOfferItems(this.authService.curentUser.username, offerId).subscribe(
       () => {
       },
       error => {
@@ -129,21 +160,76 @@ export class UsersOffersManagementComponent {
   }
 
   onChangeSelectedOffer(offer) {
+    this.disableEnableForm(offer)
     this.selectedOffer = offer;
+    console.info(this.selectedOffer)
+    this.offerform.get('title').setValue(offer.title);
+    this.offerform.get('description').setValue(offer.description);
+    this.offerform.get('categorie').setValue(offer.categorie);
+    this.offerform.get('city').setValue(offer.city);
     this.fetchOfferItems(offer.id);
+
   }
 
   onSaveItemsAffectation() {
     this.isSavingItems = true;
-    this.itemsService.saveItemAffectation(this.selectedOffer, this.loadedOfferItems).subscribe(
-      ()=>{
-        this.isSavingItems=false;
-      },
-    (error)=>{
-        this.errorMessage=error;
-      this.isSavingItems=false;
+    let offerRequest: OfferRequest = new OfferRequest
+    (this.offerform.get('title').value, this.offerform.get('description').value, this.offerform.get('categorie').value, this.offerform.get('city').value, null);
+
+
+    let offerWithItemsRequest: OfferWithItemsRequest = {
+      offerRequest: offerRequest,
+      items: this.loadedItems
+
     }
+    //console.log(offerWithItemsRequest)
+    this.itemsService.saveItemAffectation(this.selectedOffer, offerWithItemsRequest).subscribe(
+      () => {
+        this.isSavingItems = false;
+        this.fetchOffers();
+      },
+      (error) => {
+        this.errorMessage = error;
+        this.isSavingItems = false;
+      }
     )
   }
+
+
+  isTheSelectedOne(i: number,offer:Offer): boolean {
+    if(this.loadedOffers.length==0)
+      return false;
+    else if (this.selectedOffer === null){
+      if(i === 0){
+        this.onChangeSelectedOffer(offer)
+        return true;
+      }
+
+      else return false
+    }
+    else if(offer.id===this.selectedOffer.id){
+      return true;
+
+    }
+    else return false;
+  }
+
+
+  private disableEnableForm(offer:Offer){
+    if(offer.status !== "FREE"){
+      this.offerform.get('title').disable();
+      this.offerform.get('description').disable();
+      this.offerform.get('categorie').disable();
+      this.offerform.get('city').disable();
+    }
+    else{
+      this.offerform.get('title').enable();
+      this.offerform.get('description').enable();
+      this.offerform.get('categorie').enable();
+      this.offerform.get('city').enable();
+    }
+
+  }
+
 
 }

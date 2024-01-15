@@ -1,7 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {Offer} from "../../models/Offer.model";
 import {ActivatedRoute, Route} from "@angular/router";
 import {OffersService} from "../../services/offers.service";
+
+import {PhotosService} from "../../services/photos.service";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UsersAddItemComponent} from "../../user/users-items-management/users-add-item/users-add-item.component";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-offer-details',
@@ -10,27 +15,76 @@ import {OffersService} from "../../services/offers.service";
 })
 export class OfferDetailsComponent implements OnInit {
 
-  public offer: Offer;
-  public offerId: any;
-  private errorMessage: string;
-  private isLoading = true;
 
-  constructor(private route: ActivatedRoute, private offersService: OffersService) {
+  form: FormGroup;
+  errorMessage = "";
+  isSavingOffer: boolean = false;
+  imagePath: string;
+  cities:String[]=["Rabat","Casablanca","Fes","Agadir"];
+  categories:String[]=["Maison","Auto-Moto","Enfants","Voyages"];
+  mode:string = "withoutDeleteOption";
+  loadedOffer:Offer;
 
+  //***images ***//
+  constructor(private offersService: OffersService,
+              public dialogRef: MatDialogRef<UsersAddItemComponent>,
+              private photoService: PhotosService, private dialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) private data: { offer: Offer,mode:string }) {
   }
 
-  ngOnInit(): void {
-    this.isLoading = true;
-    this.offerId = this.route.snapshot.paramMap.get("offerId");
-    this.offersService.getOffer(this.offerId).subscribe(
-      (resData: any) => {
-        this.offer = resData;
-        this.isLoading = false
+  ngOnInit() {
+    this.mode=this.data.mode;
+    this.loadedOffer=this.data.offer;
+    console.log(this.loadedOffer)
+    this.isSavingOffer = false;
+    this.errorMessage = "";
+
+
+    this.form = new FormGroup({
+
+      title: new FormControl({value: this.loadedOffer.title, disabled: true}, {
+        updateOn: 'change',
+        validators: [Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(50)]
+
+      }),
+      description: new FormControl({value: this.loadedOffer.description, disabled: true}, {
+        updateOn: 'change',
+        validators: []
+      }),
+      categorie: new FormControl({value: this.loadedOffer.categorie, disabled: true}, {
+        updateOn: 'change',
+        validators: []
+      }),
+      city: new FormControl({value: this.loadedOffer.city, disabled: true}, {
+          updateOn: 'change',
+          validators: [Validators.required]
+        }
+      ),
+
+
+    })
+    this.form.get('categorie').setValue(this.loadedOffer.categorie);
+    this.form.get('city').setValue(this.loadedOffer.city);
+  }
+
+
+  onSaveOffer() {
+    this.isSavingOffer= true;
+    this.errorMessage = "";
+
+    this.offersService.addOffer(this.form.value['title'], this.form.value['description'], this.form.value['categorie'],this.form.value['city']).subscribe(
+      (res: any) => {
+        this.isSavingOffer = false;
+        this.dialogRef.close('success');
       },
       (error) => {
-        this.errorMessage = error;
-        this.isLoading=false;
+        this.isSavingOffer = false;
+        this.errorMessage = error.message
       }
     )
   }
+
+
 }

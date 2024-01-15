@@ -71,6 +71,10 @@
     <div class="example-button-row">
       <button mat-button (click)="annuler()">Annuler</button>
       <button mat-button color="primary" (click)="onUpdateProposal()" [disabled]="proposedItems.length==0">Mettre à jour</button>
+
+    </div>
+    <div mat-dialog-actions align="end" *ngIf="mode === 'withDeleteOption'">
+      <button mat-button color="danger" (click)="onDeleteProposal()">Supprimer</button>
     </div>
   </div>
 

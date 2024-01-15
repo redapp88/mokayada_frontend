@@ -11,6 +11,7 @@ import {UsersAddProposalComponent} from "./users-add-proposal/users-add-proposal
 import {MatDialog} from "@angular/material/dialog";
 import {SharedService} from "../services/shared.service";
 import {UsersUpdateProposalComponent} from "./users-update-proposal/users-update-proposal.component";
+import {OfferDetailsComponent} from "../offers/offer-details/offer-details.component";
 
 @Component({
   selector: 'app-body',
@@ -108,8 +109,9 @@ export class BodyComponent implements OnInit {
   }
 
   onUpdateProposal(offer){
+    let mode :string = "withDeleteOption";
     const dialogRef = this.dialog.open(UsersUpdateProposalComponent, {
-      data: {offer},
+      data: {offer,mode},
       width: this.popUpWith,
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -128,5 +130,18 @@ export class BodyComponent implements OnInit {
       }
     })
     return alreadyProposal;
+  }
+
+  onDetailsOffer(offer){
+    let mode :string = "withDeleteOption";
+    const dialogRef = this.dialog.open(OfferDetailsComponent, {
+      data: {offer,mode},
+      width: this.popUpWith,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == "success") {
+
+      }
+    });
   }
 }

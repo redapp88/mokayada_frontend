@@ -50,18 +50,18 @@
       <mat-card-header>
         <mat-card-title-group>
           <mat-card-title>{{offer?.title}}</mat-card-title>
-          <mat-card-subtitle>{{offer?.id}}</mat-card-subtitle>
+          <mat-card-subtitle>Par: {{offer.owner.firstName}} {{offer.owner.lastName}}</mat-card-subtitle>
          <!-- <img mat-card-md-image [src]="offer?.items[0]?.photos[0]?.url"  [alt]="offer?.title">-->
         </mat-card-title-group>
       </mat-card-header>
       <mat-card-content>
-        {{offer?.description}}
-
-        <p></p>
+        {{offer.creationDate | date:"dd/MM/yyyy 'à' hh:mm"}}
         <mat-divider></mat-divider>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button (click)="goToDetails(offer.id)" >Details</button>
+        <button color="primary" mat-mini-fab  aria-label="Details" (click)="onDetailsOffer(offer)">
+          <mat-icon>launch</mat-icon>
+        </button>
         <button *ngIf="authSertvice.curentUser && isAlreadyMadeProposale(offer)" mat-button  class="btn-warning" (click)="onUpdateProposal(offer)" >Changer ma proposition</button>
         <button *ngIf="authSertvice.curentUser && !isAlreadyMadeProposale(offer)" mat-button  class="btn-warning" (click)="onAddProposal(offer)" >Proposer une offre</button>
       </mat-card-actions>

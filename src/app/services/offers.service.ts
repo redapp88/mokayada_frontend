@@ -100,7 +100,7 @@ export class OffersService {
 
   }
 
-  deleteOffer(id: number) {
-    return this.http.delete(`${environment.backEndUrl}/offers/delete/${id}`, this.authService.httpOptions())
+  deleteProposal(id: number) {
+    return this.http.delete(`${environment.backEndUrl}/offers/deleteProposal/${id}`, this.authService.httpOptions())
   }
 }

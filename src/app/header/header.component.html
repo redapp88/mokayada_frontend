@@ -31,9 +31,8 @@
             <a class="dropdown-item" [routerLink]="['/user/offers-management']">Offres</a>
             <a class="dropdown-item" [routerLink]="['/user/items-management']">Items</a>
             <a class="dropdown-item" [routerLink]="['/user/proposales-management']">Mes propositions</a>
-
-
             <a class="dropdown-item" href="#">Profile</a>
+            <a class="dropdown-item" (click)="onLogout()">Deconnexion</a>
           </div>
         </div>
       </li>
