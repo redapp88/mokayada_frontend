@@ -99,7 +99,7 @@
 
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close [disabled]="isSavingItem || isSavingImages ">Anuler</button>
+    <button mat-button mat-dialog-close [disabled]="isSavingItem || isSavingImages ">Annuler</button>
     <button mat-button  cdkFocusInitial (click)="onUpdateItem() " [disabled]="isSavingItem || isSavingImages || !form.valid || (currentPhotos.length == 0 && imageurls.length == 0)">Mettre a jour</button>
   </mat-dialog-actions>
 </form>

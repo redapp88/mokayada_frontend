@@ -40,6 +40,13 @@ import { UsersAddProposalComponent } from './body/users-add-proposal/users-add-p
 import { UsersUpdateProposalComponent } from './body/users-update-proposal/users-update-proposal.component';
 import { UsersProposalManagementComponent } from './user/users-proposal-management/users-proposal-management.component';
 import { UsersDeleteProposalComponent } from './body/users-delete-proposal/users-delete-proposal.component';
+import { UsersOfferProposalsListComponent } from './user/users-proposal-management/users-offer-proposals-list/users-offer-proposals-list.component';
+import {CdkTreeModule} from "@angular/cdk/tree";
+import { UsersDetailsItemStaticComponent } from './user/users-items-management/users-details-item-static/users-details-item-static.component';
+import { UsersOfferProposalAcceptComponent } from './user/users-proposal-management/users-offer-proposal-accept/users-offer-proposal-accept.component';
+import { UsersProposalOfferConcludedBoardComponent } from './user/users-proposal-management/users-proposal-offer-concluded-board/users-proposal-offer-concluded-board.component';
+import {ScrollingModule} from "@angular/cdk/scrolling";
+import { UsersDeleteOfferComponent } from './user/users-offers-management/users-delete-offer/users-delete-offer.component';
 
 
 @NgModule({
@@ -62,6 +69,11 @@ import { UsersDeleteProposalComponent } from './body/users-delete-proposal/users
     UsersUpdateProposalComponent,
     UsersProposalManagementComponent,
     UsersDeleteProposalComponent,
+    UsersOfferProposalsListComponent,
+    UsersDetailsItemStaticComponent,
+    UsersOfferProposalAcceptComponent,
+    UsersProposalOfferConcludedBoardComponent,
+    UsersDeleteOfferComponent,
 
   ],
   imports: [
@@ -88,7 +100,9 @@ import { UsersDeleteProposalComponent } from './body/users-delete-proposal/users
     MatPaginatorModule,
     MatListModule,
     DragDropModule,
-    MatButtonModule
+    MatButtonModule,
+    CdkTreeModule,
+    ScrollingModule
 
   ],
   exports: [MatFormFieldModule, MatInputModule],

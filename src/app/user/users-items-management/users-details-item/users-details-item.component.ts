@@ -28,7 +28,7 @@ export class UsersDetailsItemComponent implements OnInit {
   base64String: string;
   name: string;
   imagePath: string;
-  statusList: String[] = ["Actif", "En attente"];
+  statusList:String[]=["Neuf","Occasion"];
   loadedItem: Item;
   currentPhotos:AppPhoto[]=[];
   deletedPhotos:AppPhoto[]=[];

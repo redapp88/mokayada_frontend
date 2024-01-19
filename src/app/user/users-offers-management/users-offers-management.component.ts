@@ -12,6 +12,8 @@ import {UsersAddItemComponent} from "../users-items-management/users-add-item/us
 import {UsersAddOfferComponent} from "./users-add-offer/users-add-offer.component";
 import {OfferRequest} from "../../requests/Offer.request";
 import {OfferWithItemsRequest} from "../../requests/OfferWithItems.request";
+import {UsersOfferProposalsListComponent} from "../users-proposal-management/users-offer-proposals-list/users-offer-proposals-list.component";
+import {UsersDeleteOfferComponent} from "./users-delete-offer/users-delete-offer.component";
 
 @Component({
   selector: 'app-users-offers-management',
@@ -231,5 +233,32 @@ export class UsersOffersManagementComponent {
 
   }
 
+  onShowProposals(){
+    let offer = this.selectedOffer;
+    const dialogRef = this.dialog.open(UsersOfferProposalsListComponent, {
+      data: {offer},
+      width: this.popUpWith,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == "success") {
+        this.sharedService.openSnackBar("Proposition accepté", "")
+        this.fetchOffers();
+      }
+    });
+  }
+
+  onDeleteOffer(offer:Offer){
+
+    const dialogRef = this.dialog.open(UsersDeleteOfferComponent, {
+      data: {offer},
+      width: this.popUpWith,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == "success") {
+        this.sharedService.openSnackBar("Proposition accepté", "")
+        this.fetchOffers();
+      }
+    });
+  }
 
 }

@@ -103,4 +103,13 @@ export class OffersService {
   deleteProposal(id: number) {
     return this.http.delete(`${environment.backEndUrl}/offers/deleteProposal/${id}`, this.authService.httpOptions())
   }
+
+  acceptProposal(proposal: Offer) {
+    return this.http.put(`${environment.backEndUrl}/offers/acceptProposal/${proposal.id}`,proposal, this.authService.httpOptions())
+
+  }
+
+  deleteOffer(offer: Offer) {
+    return this.http.delete(`${environment.backEndUrl}/offers/deleteOffer/${offer.id}`, this.authService.httpOptions())
+  }
 }

@@ -1,0 +1,111 @@
+<div class="row">
+  <div class="col" align="center">
+    <h1 class="text-success">Felicitation!! Contrat conclus</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-8">
+    <h1>Votre Offre</h1>
+  </div>
+  <div class="col-4" align="right">
+
+      <button mat-mini-fab color="accent" aria-label="Example icon button with a home icon">
+        <mat-icon>print</mat-icon>
+      </button>
+    </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <h3>Titre:</h3>
+  </div>
+  <div class="8">
+    {{loadedOffer.title}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <h3>Description:</h3>
+  </div>
+  <div class="8">
+    {{loadedOffer.description}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <h3>Date de creation:</h3>
+  </div>
+  <div class="8">
+    {{loadedOffer.creationDate | date:'dd/MM/yyyy à HH:mm'}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-2" *ngFor="let item of loadedOffer.items">
+    <span class="badge badge-primary">{{item.title}}</span>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+<div class="row">
+  <div class="col-8">
+    <h1>Offre Acceptée</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <h3>Titre:</h3>
+  </div>
+  <div class="8">
+    {{loadedProposal.title}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-4">
+    <h3>Date de creation:</h3>
+  </div>
+  <div class="8">
+    {{loadedProposal.creationDate | date:'dd/MM/yyyy à HH:mm'}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-2" *ngFor="let item of loadedProposal.items">
+    <span class="badge badge-primary">{{item.title}}</span>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="row">
+  <div class="col-8">
+    <h1>Contacte </h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <h3>Nom complet</h3>
+  </div>
+  <div class="8">
+    {{loadedProposal.owner.firstName}} {{loadedProposal.owner.lastName}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <h3>Email</h3>
+  </div>
+  <div class="8">
+    {{loadedProposal.owner.email}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <h3>Telephone</h3>
+  </div>
+  <div class="8">
+    {{loadedProposal.owner.phone}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <small > une copie de ce reçu est envoyé a votre a adresse Email</small>
+  </div>
+</div>
+
